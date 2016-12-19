@@ -74,7 +74,7 @@ public class WebShop {
 
                     selected = scan.nextInt() - 1;
 
-                    //TODO Fixa så att man kan lägga till flera i bag och gå tillbaka o sånt skit
+                    //TODO Fixa så att man kan lägga till flera i bag och gå tillbaka o sånt skit.
                     if(selected==8){
                         view.displayBag(model.bagInfo(bag));
                         return;

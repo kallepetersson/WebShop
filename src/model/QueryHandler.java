@@ -3,9 +3,7 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 
-/**
- * Created by kallepetersson on 2016-12-19.
- */
+
 public class QueryHandler {
 
     private static Connection connection = null;

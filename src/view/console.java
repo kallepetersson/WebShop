@@ -52,7 +52,7 @@ public class Console {
 
     public void displayItemInfo(ArrayList<String> itemInfo){
         System.out.println(itemInfo.get(1));
-        System.out.println("-------------------");
+        System.out.println("--------------------");
         System.out.println("Price: "+itemInfo.get(3));
         System.out.println("ID: "+itemInfo.get(0));
         System.out.println("In Stock: "+itemInfo.get(4));
