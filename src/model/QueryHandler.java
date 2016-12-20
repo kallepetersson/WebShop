@@ -57,32 +57,28 @@ public class QueryHandler {
         return itemInfo;
     }
 
-    public ArrayList<ArrayList<String>> bagInfo(ArrayList<Integer> itemIDs) {
-        ArrayList<ArrayList<String>> bag = new ArrayList<ArrayList<String>>();
+    public ArrayList<ArrayList<String>> cartInfo(ArrayList<Integer[]> itemIDs) {
+        ArrayList<ArrayList<String>> cart = new ArrayList<>();
 
         try {
             for (int i = 0; i < itemIDs.size(); i++) {
-                PreparedStatement ps = connection.prepareStatement("select * from items where item_id=?");
-                ps.setInt(1, itemIDs.get(i));
+                PreparedStatement ps = connection.prepareStatement("select item_id,itemname,price from items where item_id=?");
+                ps.setInt(1, itemIDs.get(i)[0]);
                 ResultSet rs = ps.executeQuery();
 
                 while (rs.next()) {
-                    bag.add(new ArrayList<>());
-                    bag.get(i).add(rs.getString(1));
-                    bag.get(i).add(rs.getString(2));
-                    bag.get(i).add(rs.getString(3));
-                    bag.get(i).add(rs.getString(4));
-                    bag.get(i).add(rs.getString(5));
-                    bag.get(i).add(rs.getString(6));
+                    cart.add(new ArrayList<>());
+                    cart.get(i).add(rs.getString(1));
+                    cart.get(i).add(rs.getString(2));
+                    cart.get(i).add(rs.getString(3));
+                    cart.get(i).add(itemIDs.get(i)[1].toString());
                 }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return bag;
-
-
+        return cart;
     }
 
 
@@ -130,4 +126,7 @@ public class QueryHandler {
         }
         return strings;
     }
+
 }
+
+

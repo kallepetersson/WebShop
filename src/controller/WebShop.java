@@ -18,19 +18,18 @@ public class WebShop {
     private String itemInfo;
     private int itemStock;
 
-    private ArrayList<Integer> bag;
+    private static ArrayList<Integer[]> cart;
 
 
     public void startClient() {
-        bag = new ArrayList<>();
-
+        cart = new ArrayList<>();
 
         view.chooseUser();
         model.setConnection();
         Scanner scan = new Scanner(System.in);
 
         int user = scan.nextInt();
-        int selected =-1;
+        int selected = -1;
         switch (user) {     // 1. Admin | 2. Customer
 
             case 1:     // Admin
@@ -66,19 +65,42 @@ public class WebShop {
 
             case 2:     // Customer
                 view.loggedInAs("Customer");
-
+                ArrayList<String> categories;
                 do {
+                    while (true) {
+                        categories = model.getCategories();
+                        view.displayCategories(categories);
 
-                    ArrayList<String> categories = model.getCategories();
-                    view.displayCategories(categories);
+                        selected = scan.nextInt() - 1;
 
-                    selected = scan.nextInt() - 1;
+                        if (selected != 8) {
+                            break;
+                        }
+                        switch (selected) {
+                            case 8:
+                                view.displayBag(model.cartInfo(cart));
+                                if (cart.size() == 0) {
+                                    System.out.println("You have no items in the cart");
+                                    break;
+                                }
+                                System.out.println("1. Checkout | 2. Remove Item | 3. Continue Shopping");
+                                selected = scan.nextInt();
 
-                    //TODO Fixa så att man kan lägga till flera i bag och gå tillbaka o sånt skit.
-                    if(selected==8){
-                        view.displayBag(model.bagInfo(bag));
-                        return;
+                                switch (selected) {
+                                    case 1:
+                                        //TODO place order query
+                                        break;
+                                    case 2:
+                                        System.out.println("Enter item id to be removed from the cart");
+                                        selected = scan.nextInt();
+                                        removeItemFromCart(selected);
+                                        break;
+                                    case 3:
+                                        break;
+                                }
+                        }
                     }
+
                     ArrayList<String> itemsInCategory = model.getItemsInCategory(categories.get(selected));
                     view.displayItemsInCategory(itemsInCategory);
 
@@ -87,15 +109,26 @@ public class WebShop {
                     ArrayList<String> itemInfo = model.getItemInfo(itemsInCategory.get(selected));
                     view.displayItemInfo(itemInfo);
 
-                    System.out.println("1. Add to bag | 2. Go back to categories");
-                    System.out.println(Integer.valueOf(itemInfo.get(0)));
-                    selected=scan.nextInt();
+                    System.out.println("1. Add to cart | 2. Go back to categories");
+                    selected = scan.nextInt();
                     switch (selected) {
                         case 1:
-                            bag.add(Integer.valueOf(itemInfo.get(0)));
+                            boolean found = false;
+                            for (int i = 0; i < cart.size(); i++) {
+                                if (cart.get(i)[0].equals(Integer.valueOf(itemInfo.get(0)))) {
+                                    cart.get(i)[1]++;
+                                    found = true;
+                                    break;
+                                }
+                                found = false;
+                            }
+                            if (!found) {
+                                Integer[] temp = {Integer.valueOf(itemInfo.get(0)), 1};
+                                cart.add(temp);
+                            }
                             break;
                     }
-                }while(selected!=0);
+                } while (selected != 0);
 
                 break;
             default:
@@ -130,6 +163,19 @@ public class WebShop {
 
         view.adminNewItem("stock");
         this.itemStock = scanInt.nextInt();
+    }
+
+    public void removeItemFromCart(int id) {
+        for (int i = 0; i < cart.size(); i++) {
+            if (id == cart.get(i)[0]) {
+                if(cart.get(i)[1]>1){
+                    cart.get(i)[1]--;
+                }else {
+                    cart.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
 
