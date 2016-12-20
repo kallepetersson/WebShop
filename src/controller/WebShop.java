@@ -88,7 +88,7 @@ public class WebShop {
 
                                 switch (selected) {
                                     case 1:
-                                        //TODO place order query
+                                        model.placeOrder(cart,1);
                                         break;
                                     case 2:
                                         System.out.println("Enter item id to be removed from the cart");

@@ -127,6 +127,30 @@ public class QueryHandler {
         return strings;
     }
 
+
+    public int placeOrder(ArrayList<Integer[]> cart, int customerID) {
+        int orderID = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement("insert into orders(customer_id, order_date) values (?, strftime('%Y-%m-%d %H:%M:%S','now'))");
+            ps.setInt(1, customerID);
+            ps.executeUpdate();
+            ps = connection.prepareStatement("SELECT last_insert_rowid()");
+            ResultSet rs = ps.executeQuery();
+            orderID = rs.getInt(1);
+            for (int i = 0; i < cart.size(); i++) {
+                ps = connection.prepareStatement("INSERT INTO ordered_items(order_id, item_id, quantity) VALUES(?,?,?)");
+                ps.setInt(1, orderID);
+                ps.setInt(2, cart.get(i)[0]);
+                ps.setInt(3, cart.get(i)[1]);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderID;
+
+    }
+
 }
 
 

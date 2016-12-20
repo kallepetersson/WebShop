@@ -65,8 +65,8 @@ public class CreateDB {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS orders(" +
                     "order_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "customer_id INTEGER," +
-                    "Order_date TEXT," +
-                    "Shipped_date TEXT," +
+                    "order_date TEXT," +
+                    "Shipped_date TEXT DEFAULT 'Processing'," +
                     "FOREIGN KEY (customer_id) REFERENCES customers(id) ON UPDATE CASCADE" +
                     ")");
 
@@ -74,6 +74,7 @@ public class CreateDB {
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS ordered_items(" +
                     "order_id INTEGER," +
                     "item_id INTEGER," +
+                    "quantity INTEGER,"+
                     "PRIMARY KEY(order_id, item_id)," +
                     "FOREIGN KEY (order_id) REFERENCES orders(order_id)," +
                     "FOREIGN KEY (item_id) REFERENCES items(item_id) ON UPDATE CASCADE" +
