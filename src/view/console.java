@@ -2,11 +2,7 @@ package view;
 
 import java.util.ArrayList;
 
-/**
- * Created by kallepetersson on 2016-12-18.
- */
 public class console {
-
 
     public void chooseUser() {
         System.out.println("1. Admin | 2. Customer");
@@ -22,10 +18,6 @@ public class console {
 
     public void adminNewItem(String item) {
         System.out.println("Enter " + item);
-    }
-
-    public void showItems(String item) {
-        System.out.print(item);
     }
 
     public void displayCategories(ArrayList<String> categories) {
@@ -56,7 +48,6 @@ public class console {
         System.out.println("In Stock: " + itemInfo.get(4));
         System.out.println(itemInfo.get(5));
     }
-
 
     public void displayBag(ArrayList<ArrayList<String>> bag) {
         int totalPrice = 0;
@@ -130,5 +121,5 @@ public class console {
     public void newCustomer(int customer){
         System.out.println("Your Customer id: " + customer);
     }
-}
 
+}

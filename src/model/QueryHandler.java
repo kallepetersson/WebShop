@@ -3,12 +3,10 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 
-
 public class QueryHandler {
 
     private static Connection connection = null;
     private static String dataBaseName = "jdbc:sqlite:webshop.db";
-
 
     public void createItem(int item_id, String itemname, String category, int price, String info, int stock) {
         // create Query

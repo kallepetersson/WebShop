@@ -5,9 +5,6 @@ import view.console;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Created by kallepetersson on 2016-12-19.
- */
 public class WebShop {
 
     console view = new console();
@@ -21,7 +18,6 @@ public class WebShop {
     private int itemStock;
 
     private static ArrayList<Integer[]> cart;
-
 
     public void startClient() {
         cart = new ArrayList<>();

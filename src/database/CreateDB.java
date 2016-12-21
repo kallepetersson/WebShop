@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Scanner;
-
 
 public class CreateDB {
 
@@ -18,12 +15,10 @@ public class CreateDB {
         setConnectionAndCreateDB(false);
 //        importItems();
 
-
         SQLQuery("select * from items",6,"");
         SQLQuery("select * from customers",8,"");
         SQLQuery("select * from orders",3,"");
         SQLQuery("select * from ordered_items",2,"");
-
 
         closeConnection();
     }
@@ -79,19 +74,6 @@ public class CreateDB {
                     "FOREIGN KEY (order_id) REFERENCES orders(order_id)," +
                     "FOREIGN KEY (item_id) REFERENCES items(item_id) ON UPDATE CASCADE" +
                     ")");
-
-//            String insertTableSQL = "INSERT INTO customers"
-//                    + "(firstname, lastname, address, zipcode, city, email, phone) VALUES"
-//                    + "(?,?,?,?,?,?,?)";
-//            PreparedStatement ps = connection.prepareStatement(insertTableSQL);
-//            ps.setString(1, "Kalle");
-//            ps.setString(2, "Petersson");
-//            ps.setString(3, "PG");
-//            ps.setString(4, "35112");
-//            ps.setString(5, "Växjö");
-//            ps.setString(6, "email@mail.com");
-//            ps.setString(7, "1234567");
-//            ps.executeUpdate();
 
         } catch (SQLException e) {
             // if the error message is "out of memory",
