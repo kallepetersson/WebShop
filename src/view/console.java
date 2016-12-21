@@ -1,7 +1,5 @@
 package view;
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
-
 import java.util.ArrayList;
 
 /**
@@ -105,4 +103,32 @@ public class console {
     public void displayTotalPrice(int totalPrice){
         System.out.println("Total Price: " + totalPrice);
     }
+
+    public void customerIdDontExist(int id){
+        System.out.println("ID " + id + " doesn't exist in the database");
+    }
+
+    public void noItemsInCart(){
+        System.out.println("You have no items in the cart");
+    }
+
+    public void checkoutRemoveContinue(){
+        System.out.println("1. Checkout | 2. Remove Item | 3. Continue Shopping");
+    }
+
+    public void thanksForOrder(){
+        System.out.println("Thanks for you order!");
+    }
+    public void itemIDRemoveFromCart(){
+        System.out.println("Enter item id to be removed from the cart");
+    }
+
+    public void addCartGoBack(){
+        System.out.println("1. Add to cart | 2. Go back to categories");
+    }
+
+    public void newCustomer(int customer){
+        System.out.println("Your Customer id: " + customer);
+    }
 }
+
