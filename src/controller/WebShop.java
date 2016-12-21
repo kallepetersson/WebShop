@@ -36,6 +36,8 @@ public class WebShop {
             view.chooseUser();
 
             int user = scan.nextInt();
+
+            loop:
             switch (user) {     // 1. Admin | 2. Customer
 
                 case 1:     // Admin
@@ -67,6 +69,8 @@ public class WebShop {
                     view.loginRegister();
                     selected = scan.nextInt();
                     switch (selected) {
+                        case 9:
+                            break loop;
                         case 1:
                             view.customerID();
                             selected = scan.nextInt();
@@ -87,11 +91,12 @@ public class WebShop {
 
                                     selected = scan.nextInt() - 1;
 
-                                    if (selected != 8 && selected != 7) {
+                                    if (selected != 8 && selected != 7 && selected != 9) {
                                         break;
                                     }
                                     switch (selected) {
-
+                                        case 9:
+                                            break loop;
                                         case 7:
                                             ArrayList<ArrayList<String>> ordersInfo = model.displayCustomerOrders(customerID);
                                             for (int i = 0; i < ordersInfo.size(); i++) {
