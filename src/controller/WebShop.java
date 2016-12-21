@@ -24,122 +24,168 @@ public class WebShop {
     public void startClient() {
         cart = new ArrayList<>();
 
-        view.chooseUser();
+        int customerID;
         model.setConnection();
         Scanner scan = new Scanner(System.in);
 
-        int user = scan.nextInt();
-        int selected = -1;
-        switch (user) {     // 1. Admin | 2. Customer
 
-            case 1:     // Admin
+        int selected = 0;
 
-                view.loggedInAs("Admin");
-                view.adminCommand();
+        while (true) {
+            view.chooseUser();
 
-                switch (scan.nextInt()) {   // 1. Add item | 2. Update item | 3. Remove item
+            int user = scan.nextInt();
+            switch (user) {     // 1. Admin | 2. Customer
 
-                    case 1:     // Add item
+                case 1:     // Admin
 
-                        setItemInfo();
-                        model.createItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
+                    view.loggedInAs("Admin");
+                    view.adminCommand();
 
-                        break;
-                    case 2:     // Update item
+                    switch (scan.nextInt()) {   // 1. Add item | 2. Update item | 3. Remove item
 
-                        setItemInfo();
-                        model.updateItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
+                        case 1:     // Add item
 
-                        break;
-                    case 3:     // // Delete item
-                        Scanner itemToDelete = new Scanner(System.in);
-                        model.deleteItem(itemToDelete.nextLine());
+                            setItemInfo();
+                            model.createItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
 
-                        break;
-
-
-                }
-
-
-                break;
-
-            case 2:     // Customer
-                view.loggedInAs("Customer");
-                ArrayList<String> categories;
-                do {
-                    while (true) {
-                        categories = model.getCategories();
-                        view.displayCategories(categories);
-
-                        selected = scan.nextInt() - 1;
-
-                        if (selected != 8) {
                             break;
-                        }
-                        switch (selected) {
-                            case 8:
-                                view.displayBag(model.cartInfo(cart));
-                                if (cart.size() == 0) {
-                                    System.out.println("You have no items in the cart");
-                                    break;
-                                }
-                                System.out.println("1. Checkout | 2. Remove Item | 3. Continue Shopping");
-                                selected = scan.nextInt();
+                        case 2:     // Update item
 
-                                switch (selected) {
-                                    case 1:
-                                        model.placeOrder(cart,1);
-                                        break;
-                                    case 2:
-                                        System.out.println("Enter item id to be removed from the cart");
-                                        selected = scan.nextInt();
-                                        removeItemFromCart(selected);
-                                        break;
-                                    case 3:
-                                        break;
-                                }
-                        }
+                            setItemInfo();
+                            model.updateItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
+
+                            break;
+                        case 3:     // // Delete item
+                            Scanner itemToDelete = new Scanner(System.in);
+                            model.deleteItem(itemToDelete.nextLine());
+
+                            break;
                     }
+                    break;
 
-                    ArrayList<String> itemsInCategory = model.getItemsInCategory(categories.get(selected));
-                    view.displayItemsInCategory(itemsInCategory);
-
-                    selected = scan.nextInt() - 1;
-
-                    ArrayList<String> itemInfo = model.getItemInfo(itemsInCategory.get(selected));
-                    view.displayItemInfo(itemInfo);
-
-                    System.out.println("1. Add to cart | 2. Go back to categories");
+                case 2:     // Customer
+                    view.loginRegister();
                     selected = scan.nextInt();
                     switch (selected) {
                         case 1:
-                            boolean found = false;
-                            for (int i = 0; i < cart.size(); i++) {
-                                if (cart.get(i)[0].equals(Integer.valueOf(itemInfo.get(0)))) {
-                                    cart.get(i)[1]++;
-                                    found = true;
-                                    break;
-                                }
-                                found = false;
-                            }
-                            if (!found) {
-                                Integer[] temp = {Integer.valueOf(itemInfo.get(0)), 1};
-                                cart.add(temp);
-                            }
-                            break;
-                    }
-                } while (selected != 0);
+                            view.customerID();
+                            selected = scan.nextInt();
 
-                break;
-            default:
-                return;
+                            if (model.userExist(selected)) {
+                                view.loggedInAs(model.displayCustomerName(selected));
+                                customerID = selected;
+                            } else {
+                                System.out.println("ID " + selected + " doesn't exist in the database");
+                                break;
+                            }
+
+                            ArrayList<String> categories;
+                            do {
+                                while (true) {
+                                    categories = model.getCategories();
+                                    view.displayCategories(categories);
+
+                                    selected = scan.nextInt() - 1;
+
+                                    if (selected != 8 && selected != 7) {
+                                        break;
+                                    }
+                                    switch (selected) {
+                                        case 7:
+                                            ArrayList<ArrayList<String>> ordersInfo = model.displayCustomerOrders(customerID);
+                                            for (int i = 0; i < ordersInfo.size(); i++) {
+                                                int totalPrice = 0;
+                                                System.out.print("------------------------------------\nID: ");
+                                                for (int j = 0; j < ordersInfo.get(i).size(); j++) {
+                                                    System.out.print(ordersInfo.get(i).get(j) + " ");
+                                                }
+                                                System.out.println();
+                                                ArrayList<ArrayList<String>> OrderItems = model.displayOrderedItems(Integer.valueOf(ordersInfo.get(i).get(0)));
+                                                for (int j = 0; j < OrderItems.size(); j++) {
+                                                    ArrayList<String> itemInfo = model.getItemInfoByID(Integer.valueOf(OrderItems.get(j).get(0)));
+                                                    System.out.println(OrderItems.get(j).get(1)+" "+itemInfo.get(0)+" Price: "+itemInfo.get(1));
+                                                    totalPrice += Integer.valueOf(itemInfo.get(1))*Integer.valueOf(OrderItems.get(j).get(1));
+                                                }
+                                                System.out.println("Total Price: "+totalPrice);
+                                                if(i==ordersInfo.size()-1){
+                                                    System.out.println("------------------------------------");
+                                                }
+                                            }
+                                            break;
+                                        case 8:
+                                            if (cart.size() == 0) {
+                                                System.out.println("You have no items in the cart");
+                                                break;
+                                            } else {
+                                                view.displayBag(model.cartInfo(cart));
+                                            }
+                                            System.out.println("1. Checkout | 2. Remove Item | 3. Continue Shopping");
+                                            selected = scan.nextInt();
+
+                                            switch (selected) {
+                                                //Checkout
+                                                case 1:
+                                                    System.out.println("Thanks for you order!");
+                                                    model.placeOrder(cart, customerID);
+                                                    cart.clear();
+                                                    break;
+                                                //Remove item
+                                                case 2:
+                                                    System.out.println("Enter item id to be removed from the cart");
+                                                    selected = scan.nextInt();
+                                                    removeItemFromCart(selected);
+                                                    break;
+                                                //Continue shopping
+                                                case 3:
+                                                    break;
+                                            }
+                                    }
+                                }
+
+                                ArrayList<String> itemsInCategory = model.getItemsInCategory(categories.get(selected));
+                                view.displayItemsInCategory(itemsInCategory);
+
+                                selected = scan.nextInt() - 1;
+
+                                ArrayList<String> itemInfo = model.getItemInfo(itemsInCategory.get(selected));
+                                view.displayItemInfo(itemInfo);
+
+                                System.out.println("1. Add to cart | 2. Go back to categories");
+                                selected = scan.nextInt();
+                                switch (selected) {
+                                    case 1:
+                                        boolean found = false;
+                                        for (int i = 0; i < cart.size(); i++) {
+                                            if (cart.get(i)[0].equals(Integer.valueOf(itemInfo.get(0)))) {
+                                                cart.get(i)[1]++;
+                                                found = true;
+                                                break;
+                                            }
+                                            found = false;
+                                        }
+                                        if (!found) {
+                                            Integer[] temp = {Integer.valueOf(itemInfo.get(0)), 1};
+                                            cart.add(temp);
+                                        }
+                                        break;
+                                }
+                            } while (selected != 0);
+
+                        case 2:
+                            System.out.println("Your Customer id: " + model.registerCustomer(newCustomer()));
+                    }
+
+                    break;
+                default:
+                    return;
+
+            }
 
         }
-
-        model.closeConnection();
+        //model.closeConnection();
 
     }
-
 
     public void setItemInfo() {
 
@@ -165,12 +211,32 @@ public class WebShop {
         this.itemStock = scanInt.nextInt();
     }
 
+    public ArrayList<String> newCustomer() {
+        ArrayList<String> customerInfo = new ArrayList<>();
+        Scanner scan = new Scanner(System.in);
+        view.enterInfo("first name");
+        customerInfo.add(scan.nextLine());
+        view.enterInfo("last name");
+        customerInfo.add(scan.nextLine());
+        view.enterInfo("address");
+        customerInfo.add(scan.nextLine());
+        view.enterInfo("zip code");
+        customerInfo.add(scan.nextLine());
+        view.enterInfo("city");
+        customerInfo.add(scan.nextLine());
+        view.enterInfo("email");
+        customerInfo.add(scan.nextLine());
+        view.enterInfo("phone");
+        customerInfo.add(scan.nextLine());
+        return customerInfo;
+    }
+
     public void removeItemFromCart(int id) {
         for (int i = 0; i < cart.size(); i++) {
             if (id == cart.get(i)[0]) {
-                if(cart.get(i)[1]>1){
+                if (cart.get(i)[1] > 1) {
                     cart.get(i)[1]--;
-                }else {
+                } else {
                     cart.remove(i);
                     break;
                 }

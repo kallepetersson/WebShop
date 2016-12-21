@@ -33,7 +33,7 @@ public class Console {
     public void displayCategories(ArrayList<String> categories) {
         for (int i = 0; i < categories.size(); i++) {
             if (i == categories.size() - 1) {
-                System.out.println(i + 1 + ". " + categories.get(i) + " | 9. Show Bag");
+                System.out.println(i + 1 + ". " + categories.get(i) + " | 8. Previous Orders | 9. Show Cart");
             } else {
                 System.out.print(i + 1 + ". " + categories.get(i) + " | ");
             }
@@ -77,6 +77,14 @@ public class Console {
 
 
     }
-
+    public void loginRegister(){
+        System.out.println("1. Login | 2. Register Customer");
+    }
+    public void customerID(){
+        System.out.print("Enter your customer ID: ");
+    }
+    public void enterInfo(String info) {
+        System.out.print("Enter " +info+": ");
+    }
 
 }
