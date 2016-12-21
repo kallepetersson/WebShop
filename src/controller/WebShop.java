@@ -5,6 +5,9 @@ import view.console;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Created by kallepetersson on 2016-12-19.
+ */
 public class WebShop {
 
     console view = new console();
@@ -55,6 +58,7 @@ public class WebShop {
                         case 3:     // // Delete item
                             Scanner itemToDelete = new Scanner(System.in);
                             model.deleteItem(itemToDelete.nextLine());
+
                             break;
                     }
                     break;
@@ -71,7 +75,7 @@ public class WebShop {
                                 view.loggedInAs(model.displayCustomerName(selected));
                                 customerID = selected;
                             } else {
-                                view.customerIdDontExist(selected);
+                                System.out.println("ID " + selected + " doesn't exist in the database");
                                 break;
                             }
 
@@ -87,7 +91,10 @@ public class WebShop {
                                         break;
                                     }
                                     switch (selected) {
-                                        //Displaying customers order and item infos.
+
+                                        case 9:
+                                            break loop;
+
                                         case 7:
                                             ArrayList<ArrayList<String>> ordersInfo = model.displayCustomerOrders(customerID);
                                             for (int i = 0; i < ordersInfo.size(); i++) {
@@ -110,24 +117,24 @@ public class WebShop {
                                             break;
                                         case 8:
                                             if (cart.size() == 0) {
-                                                view.noItemsInCart();
+                                                System.out.println("You have no items in the cart");
                                                 break;
                                             } else {
                                                 view.displayBag(model.cartInfo(cart));
                                             }
-                                            view.checkoutRemoveContinue();
+                                            System.out.println("1. Checkout | 2. Remove Item | 3. Continue Shopping");
                                             selected = scan.nextInt();
 
                                             switch (selected) {
                                                 //Checkout
                                                 case 1:
-                                                    view.thanksForOrder();
+                                                    System.out.println("Thanks for you order!");
                                                     model.placeOrder(cart, customerID);
                                                     cart.clear();
                                                     break;
                                                 //Remove item
                                                 case 2:
-                                                    view.itemIDRemoveFromCart();
+                                                    System.out.println("Enter item id to be removed from the cart");
                                                     selected = scan.nextInt();
                                                     removeItemFromCart(selected);
                                                     break;
@@ -145,7 +152,8 @@ public class WebShop {
 
                                 ArrayList<String> itemInfo = model.getItemInfo(itemsInCategory.get(selected));
                                 view.displayItemInfo(itemInfo);
-                                view.addCartGoBack();
+
+                                System.out.println("1. Add to cart | 2. Go back to categories");
                                 selected = scan.nextInt();
                                 switch (selected) {
                                     case 1:
@@ -167,12 +175,13 @@ public class WebShop {
                             } while (selected != 0);
 
                         case 2:
-                            view.newCustomer(model.registerCustomer(newCustomer()));
+                            System.out.println("Your Customer id: " + model.registerCustomer(newCustomer()));
                     }
 
                     break;
                 default:
                     return;
+
             }
 
         }
