@@ -33,7 +33,7 @@ public class console {
     public void displayCategories(ArrayList<String> categories) {
         for (int i = 0; i < categories.size(); i++) {
             if (i == categories.size() - 1) {
-                System.out.println(i + 1 + ". " + categories.get(i) + " | 8. Previous Orders | 9. Show Cart");
+                System.out.println(i + 1 + ". " + categories.get(i) + " | 8. Previous Orders | 9. Show Cart | 10. Exit");
             } else {
                 System.out.print(i + 1 + ". " + categories.get(i) + " | ");
             }
