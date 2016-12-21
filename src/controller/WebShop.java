@@ -96,11 +96,9 @@ public class WebShop {
                                             ArrayList<ArrayList<String>> ordersInfo = model.displayCustomerOrders(customerID);
                                             for (int i = 0; i < ordersInfo.size(); i++) {
                                                 int totalPrice = 0;
-                                                System.out.print("------------------------------------\nID: ");
-                                                for (int j = 0; j < ordersInfo.get(i).size(); j++) {
-                                                    System.out.print(ordersInfo.get(i).get(j) + " ");
-                                                }
-                                                System.out.println();
+                                                System.out.println("---------------------------------------------------------------------");
+                                                System.out.println("ID: "+ordersInfo.get(i).get(0)+" | Order Date: "+ordersInfo.get(i).get(1)+
+                                                        " | Shipped Date: "+ordersInfo.get(i).get(2));
                                                 ArrayList<ArrayList<String>> OrderItems = model.displayOrderedItems(Integer.valueOf(ordersInfo.get(i).get(0)));
                                                 for (int j = 0; j < OrderItems.size(); j++) {
                                                     ArrayList<String> itemInfo = model.getItemInfoByID(Integer.valueOf(OrderItems.get(j).get(0)));
@@ -109,7 +107,7 @@ public class WebShop {
                                                 }
                                                 System.out.println("Total Price: "+totalPrice);
                                                 if(i==ordersInfo.size()-1){
-                                                    System.out.println("------------------------------------");
+                                                    System.out.println("---------------------------------------------------------------------");
                                                 }
                                             }
                                             break;
