@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by kallepetersson on 2016-12-18.
  */
-public class Console {
+public class console {
 
 
     public void chooseUser() {
@@ -61,30 +61,48 @@ public class Console {
 
 
     public void displayBag(ArrayList<ArrayList<String>> bag) {
-        int totalPrice=0;
+        int totalPrice = 0;
         System.out.println("ID | Item Name | Price | Quanity");
         for (int i = 0; i < bag.size(); i++) {
             for (int j = 0; j < bag.get(i).size(); j++) {
                 System.out.print(bag.get(i).get(j) + " ");
-                if(j==2){
+                if (j == 2) {
                     System.out.print("SEK ");
                     totalPrice += Integer.valueOf(bag.get(i).get(j));
                 }
             }
             System.out.println();
         }
-        System.out.println("Total Price: "+totalPrice+" SEK");
+        System.out.println("Total Price: " + totalPrice + " SEK");
 
 
     }
-    public void loginRegister(){
+
+    public void loginRegister() {
         System.out.println("1. Login | 2. Register Customer");
     }
-    public void customerID(){
+
+    public void customerID() {
         System.out.print("Enter your customer ID: ");
     }
+
     public void enterInfo(String info) {
-        System.out.print("Enter " +info+": ");
+        System.out.print("Enter " + info + ": ");
     }
 
+    public void displayLine() {System.out.println("---------------------------------------------------------------------");}
+
+    public void displayOrderInfo(ArrayList<String> ordersInfo){
+        System.out.println("ID: " + ordersInfo.get(0) + " | Order Date: " + ordersInfo.get(1) +
+                " | Shipped Date: " + ordersInfo.get(2));
+    }
+
+    public void displayItemInfoPrevOrder(ArrayList<String> orderItems, ArrayList<String> itemInfo){
+        System.out.println(orderItems.get(1) + " " + itemInfo.get(0) + " Price: " + itemInfo.get(1));
+
+    }
+
+    public void displayTotalPrice(int totalPrice){
+        System.out.println("Total Price: " + totalPrice);
+    }
 }

@@ -1,5 +1,7 @@
 package controller;
 
+import view.console;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,7 +10,7 @@ import java.util.Scanner;
  */
 public class WebShop {
 
-    view.Console view = new view.Console();
+    console view = new console();
     model.QueryHandler model = new model.QueryHandler();
 
     private int itemId;
@@ -28,7 +30,6 @@ public class WebShop {
         model.setConnection();
         Scanner scan = new Scanner(System.in);
 
-
         int selected = 0;
 
         while (true) {
@@ -38,14 +39,12 @@ public class WebShop {
             switch (user) {     // 1. Admin | 2. Customer
 
                 case 1:     // Admin
-
                     view.loggedInAs("Admin");
                     view.adminCommand();
 
                     switch (scan.nextInt()) {   // 1. Add item | 2. Update item | 3. Remove item
 
                         case 1:     // Add item
-
                             setItemInfo();
                             model.createItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
 
@@ -96,18 +95,19 @@ public class WebShop {
                                             ArrayList<ArrayList<String>> ordersInfo = model.displayCustomerOrders(customerID);
                                             for (int i = 0; i < ordersInfo.size(); i++) {
                                                 int totalPrice = 0;
-                                                System.out.println("---------------------------------------------------------------------");
-                                                System.out.println("ID: "+ordersInfo.get(i).get(0)+" | Order Date: "+ordersInfo.get(i).get(1)+
-                                                        " | Shipped Date: "+ordersInfo.get(i).get(2));
-                                                ArrayList<ArrayList<String>> OrderItems = model.displayOrderedItems(Integer.valueOf(ordersInfo.get(i).get(0)));
-                                                for (int j = 0; j < OrderItems.size(); j++) {
-                                                    ArrayList<String> itemInfo = model.getItemInfoByID(Integer.valueOf(OrderItems.get(j).get(0)));
-                                                    System.out.println(OrderItems.get(j).get(1)+" "+itemInfo.get(0)+" Price: "+itemInfo.get(1));
-                                                    totalPrice += Integer.valueOf(itemInfo.get(1))*Integer.valueOf(OrderItems.get(j).get(1));
+
+                                                view.displayLine();
+                                                view.displayOrderInfo(ordersInfo.get(i));
+                                                ArrayList<ArrayList<String>> orderItems = model.displayOrderedItems(Integer.valueOf(ordersInfo.get(i).get(0)));
+
+                                                for (int j = 0; j < orderItems.size(); j++) {
+                                                    ArrayList<String> itemInfo = model.getItemInfoByID(Integer.valueOf(orderItems.get(j).get(0)));
+                                                    view.displayItemInfoPrevOrder(orderItems.get(j), itemInfo);
+                                                    totalPrice += Integer.valueOf(itemInfo.get(1)) * Integer.valueOf(orderItems.get(j).get(1));
                                                 }
-                                                System.out.println("Total Price: "+totalPrice);
-                                                if(i==ordersInfo.size()-1){
-                                                    System.out.println("---------------------------------------------------------------------");
+                                                view.displayTotalPrice(totalPrice);
+                                                if (i == ordersInfo.size() - 1) {
+                                                    view.displayLine();
                                                 }
                                             }
                                             break;
