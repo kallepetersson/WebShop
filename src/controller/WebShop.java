@@ -59,11 +59,15 @@ public class WebShop {
                             view.displayAdminCategories(categories);
 
                             selected = scan.nextInt() - 1;
+                            if(selected == 9)
+                                break loop;
 
                             ArrayList<String> itemsInCategory = model.getItemsInCategory(categories.get(selected));
                             view.displayItemsInCategory(itemsInCategory);
 
                             selected = scan.nextInt() - 1;
+                            if(selected == 9)
+                                break loop;
 
                             model.deleteItem(itemsInCategory.get(selected));
 
@@ -157,6 +161,8 @@ public class WebShop {
                                 view.displayItemsInCategory(itemsInCategory);
 
                                 selected = scan.nextInt() - 1;
+                                if(selected == 9)
+                                    break loop;
 
                                 ArrayList<String> itemInfo = model.getItemInfo(itemsInCategory.get(selected));
                                 view.displayItemInfo(itemInfo);

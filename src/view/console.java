@@ -44,7 +44,7 @@ public class console {
     public void displayItemsInCategory(ArrayList<String> itemsInCategory) {
         for (int i = 0; i < itemsInCategory.size(); i++) {
             if (i == itemsInCategory.size() - 1) {
-                System.out.println(i + 1 + ". " + itemsInCategory.get(i));
+                System.out.println(i + 1 + ". " + itemsInCategory.get(i) + " | 10. Exit");
             } else {
                 System.out.print(i + 1 + ". " + itemsInCategory.get(i) + " | ");
             }
@@ -121,6 +121,7 @@ public class console {
     public void thanksForOrder(){
         System.out.println("Thanks for you order!");
     }
+
     public void itemIDRemoveFromCart(){
         System.out.println("Enter item id to be removed from the cart");
     }
