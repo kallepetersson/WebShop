@@ -21,9 +21,10 @@ public class console {
     }
 
     public void displayCategories(ArrayList<String> categories) {
+        System.out.print(" ");
         for (int i = 0; i < categories.size(); i++) {
             if (i == categories.size() - 1) {
-                System.out.println(i + 1 + ". " + categories.get(i) + " | 8. Previous Orders | 9. Show Cart | 10. Exit");
+                System.out.println(i + 1 + ". " + categories.get(i) + " | 8. Previous Orders | 9. Show Cart | 10. Exit ");
             } else {
                 System.out.print(i + 1 + ". " + categories.get(i) + " | ");
             }
@@ -31,9 +32,10 @@ public class console {
     }
 
     public void displayAdminCategories(ArrayList<String> categories) {
+        System.out.print(" ");
         for (int i = 0; i < categories.size(); i++) {
             if (i == categories.size() - 1) {
-                System.out.println(i + 1 + ". " + categories.get(i) + " | 10. Exit");
+                System.out.println(i + 1 + ". " + categories.get(i) + " | 10. Exit ");
             } else {
                 System.out.print(i + 1 + ". " + categories.get(i) + " | ");
             }

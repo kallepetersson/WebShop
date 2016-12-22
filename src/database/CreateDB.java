@@ -10,10 +10,13 @@ public class CreateDB {
     private static Connection connection = null;
     private static String dataBaseName = "jdbc:sqlite:webshop.db";
     private static String itemsBackupPath = "./itemsimport.dmp";
+    private static String customerBackupPath = "./customerimport.dmp";
+
 
     public static void main(String[] args) {
         setConnectionAndCreateDB(false);
-//        importItems();
+        importItems();
+        importCustomer();
 
         SQLQuery("select * from items",6,"");
         SQLQuery("select * from customers",8,"");
@@ -114,6 +117,37 @@ public class CreateDB {
         }
     }
 
+    public static void importCustomer() {
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(customerBackupPath));
+
+            String insertTableSQL = "INSERT INTO customers"
+                    + "(firstname, lastname, address, zipcode, city, email, phone) VALUES"
+                    + "(?,?,?,?,?,?,?)";
+            PreparedStatement ps = connection.prepareStatement(insertTableSQL);
+            String s = in.readLine();
+            while (s != null) {
+                String[] arr = s.split("\\|");
+                for (int i = 0; i < arr.length; i++) {
+                    ps.setString(1, arr[0]);
+                    ps.setString(2, arr[1]);
+                    ps.setString(3, arr[2]);
+                    ps.setString(4, arr[3]);
+                    ps.setString(5, arr[4]);
+                    ps.setString(6, arr[5]);
+                    ps.setString(7, arr[6]);
+                }
+                ps.executeUpdate();
+                s = in.readLine();
+            }
+            in.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e){
+            System.err.println(e.getMessage());
+        }
+    }
     public static void SQLQuery(String query, int col, String msg) {
         try {
 
