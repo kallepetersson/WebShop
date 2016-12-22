@@ -30,6 +30,17 @@ public class console {
         }
     }
 
+    public void displayAdminCategories(ArrayList<String> categories) {
+        for (int i = 0; i < categories.size(); i++) {
+            if (i == categories.size() - 1) {
+                System.out.println(i + 1 + ". " + categories.get(i) + " | 10. Exit");
+            } else {
+                System.out.print(i + 1 + ". " + categories.get(i) + " | ");
+            }
+        }
+    }
+
+
     public void displayItemsInCategory(ArrayList<String> itemsInCategory) {
         for (int i = 0; i < itemsInCategory.size(); i++) {
             if (i == itemsInCategory.size() - 1) {

@@ -26,7 +26,7 @@ public class WebShop {
         model.setConnection();
         Scanner scan = new Scanner(System.in);
 
-        int selected = 0;
+        int selected;
 
         while (true) {
             view.chooseUser();
@@ -53,8 +53,19 @@ public class WebShop {
 
                             break;
                         case 3:     // // Delete item
-                            Scanner itemToDelete = new Scanner(System.in);
-                            model.deleteItem(itemToDelete.nextLine());
+
+                            ArrayList<String> categories;
+                            categories = model.getCategories();
+                            view.displayAdminCategories(categories);
+
+                            selected = scan.nextInt() - 1;
+
+                            ArrayList<String> itemsInCategory = model.getItemsInCategory(categories.get(selected));
+                            view.displayItemsInCategory(itemsInCategory);
+
+                            selected = scan.nextInt() - 1;
+
+                            model.deleteItem(itemsInCategory.get(selected));
 
                             break;
                     }

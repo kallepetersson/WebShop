@@ -25,6 +25,18 @@ public class QueryHandler {
     }
 
     public void deleteItem(String name) {
+
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("delete from items where itemname = ?");
+            ps.setString(1, name);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
         // Delete Query
     }
 
