@@ -18,11 +18,6 @@ public class CreateDB {
         importItems();
         importCustomer();
 
-        SQLQuery("select * from items",6,"");
-        SQLQuery("select * from customers",8,"");
-        SQLQuery("select * from orders",3,"");
-        SQLQuery("select * from ordered_items",2,"");
-
         closeConnection();
     }
 

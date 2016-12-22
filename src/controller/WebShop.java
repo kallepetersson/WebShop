@@ -10,13 +10,6 @@ public class WebShop {
     console view = new console();
     model.QueryHandler model = new model.QueryHandler();
 
-    private int itemId;
-    private String itemName;
-    private String itemCategory;
-    private int itemPrice;
-    private String itemInfo;
-    private int itemStock;
-
     private static ArrayList<Integer[]> cart;
 
     public void startClient() {
@@ -27,10 +20,11 @@ public class WebShop {
         Scanner scan = new Scanner(System.in);
 
         int selected;
+        ArrayList<String> categories;
+        ArrayList<String> itemsInCategory;
 
         while (true) {
-            view.chooseUser();
-
+            view.printString("1. Admin | 2. Customer | 10 Quit");
             int user = scan.nextInt();
 
             loop:
@@ -38,51 +32,89 @@ public class WebShop {
 
                 case 1:     // Admin
                     view.loggedInAs("Admin");
-                    view.adminCommand();
 
-                    switch (scan.nextInt()) {   // 1. Add item | 2. Update item | 3. Remove item
+                    while(true) {
+                        view.printString("1. Add item to database | 2. Update item | 3. Remove item | 4. See orders | 5. Order info | 10. Logout");
+                        switch (scan.nextInt()) {
 
-                        case 1:     // Add item
-                            //setItemInfo();
-                            model.createItem(changeItemInfo());
+                            case 1:     // Add item
+                                model.createItem(changeItemInfo());
+                                break;
+                            case 2:     // Update item
 
-                            break;
-                        case 2:     // Update item
+                                categories = model.getCategories();
+                                view.displayAdminCategories(categories);
 
-                            //model.updateItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
+                                selected = scan.nextInt() - 1;
+                                if (selected == 9)
+                                    break;
 
-                            break;
-                        case 3:     // // Delete item
+                                itemsInCategory = model.getItemsInCategory(categories.get(selected));
+                                view.displayItemsInCategory(itemsInCategory);
 
-                            ArrayList<String> categories;
-                            categories = model.getCategories();
-                            view.displayAdminCategories(categories);
+                                selected = scan.nextInt() - 1;
+                                if (selected == 9)
+                                    break;
+                                ArrayList<String> itemInfo = model.getItemInfo(itemsInCategory.get(selected));
+                                view.displayItemInfo(itemInfo);
+                                view.printString("1. Update Price | 2. Update Stock | 10. Go Back");
+                                selected = scan.nextInt();
 
-                            selected = scan.nextInt() - 1;
-                            if(selected == 9)
+                                switch (selected) {
+                                    case 1:
+                                        view.enterInfo("price: ");
+                                        selected = scan.nextInt();
+                                        model.updateItemPrice(Integer.valueOf(itemInfo.get(0)), selected);
+                                        break;
+
+                                    case 2:
+                                        view.enterInfo("added stock: ");
+                                        selected = scan.nextInt();
+                                        model.updateItemStock(Integer.valueOf(itemInfo.get(0)), selected);
+                                        break;
+                                    case 10:
+                                        break;
+                                }
+                                break;
+                            case 3:     // // Delete item
+
+                                categories = model.getCategories();
+                                view.displayAdminCategories(categories);
+
+                                selected = scan.nextInt() - 1;
+                                if (selected == 9)
+                                    break;
+
+                                itemsInCategory = model.getItemsInCategory(categories.get(selected));
+                                view.displayItemsInCategory(itemsInCategory);
+
+                                selected = scan.nextInt() - 1;
+                                if (selected == 9)
+                                    break;
+
+                                model.deleteItem(itemsInCategory.get(selected));
+
+                                break;
+                            case 4:
+                                view.displayAllOrders(model.allOrders());
+                                break;
+                            case 5:
+                                view.enterInfo("order id: ");
+                                selected = scan.nextInt();
+                                view.displayAllItemsInOrder(model.displayOrderedItems(selected));
+                                break;
+                            case 10:
                                 break loop;
-
-                            ArrayList<String> itemsInCategory = model.getItemsInCategory(categories.get(selected));
-                            view.displayItemsInCategory(itemsInCategory);
-
-                            selected = scan.nextInt() - 1;
-                            if(selected == 9)
-                                break loop;
-
-                            model.deleteItem(itemsInCategory.get(selected));
-
-                            break;
+                        }
                     }
-                    break;
-
                 case 2:     // Customer
-                    view.loginRegister();
+                    view.printString("1. Login | 2. Register Customer");
                     selected = scan.nextInt();
                     switch (selected) {
                         case 9:
                             break loop;
                         case 1:
-                            view.customerID();
+                            view.printString("Enter your customer ID: ");
                             selected = scan.nextInt();
 
                             if (model.userExist(selected)) {
@@ -93,7 +125,6 @@ public class WebShop {
                                 break;
                             }
 
-                            ArrayList<String> categories;
                             do {
                                 while (true) {
                                     categories = model.getCategories();
@@ -104,6 +135,7 @@ public class WebShop {
                                     if (selected != 8 && selected != 7 && selected != 9) {
                                         break;
                                     }
+
                                     switch (selected) {
                                         case 9:
                                             break loop;
@@ -129,24 +161,24 @@ public class WebShop {
                                             break;
                                         case 8:
                                             if (cart.size() == 0) {
-                                                view.noItemsInCart();
+                                                view.printString("You have no items in the cart");
                                                 break;
                                             } else {
                                                 view.displayBag(model.cartInfo(cart));
                                             }
-                                            view.checkoutRemoveContinue();
+                                            view.printString("1. Checkout | 2. Remove Item | 3. Continue Shopping");
                                             selected = scan.nextInt();
 
                                             switch (selected) {
                                                 //Checkout
                                                 case 1:
-                                                    view.thanksForOrder();
+                                                    view.printString("Thanks for your order!");
                                                     model.placeOrder(cart, customerID);
                                                     cart.clear();
                                                     break;
                                                 //Remove item
                                                 case 2:
-                                                    view.itemIDRemoveFromCart();
+                                                    view.printString("Enter item id to be removed from the cart");
                                                     selected = scan.nextInt();
                                                     removeItemFromCart(selected);
                                                     break;
@@ -157,17 +189,17 @@ public class WebShop {
                                     }
                                 }
 
-                                ArrayList<String> itemsInCategory = model.getItemsInCategory(categories.get(selected));
+                                itemsInCategory = model.getItemsInCategory(categories.get(selected));
                                 view.displayItemsInCategory(itemsInCategory);
 
                                 selected = scan.nextInt() - 1;
-                                if(selected == 9)
+                                if (selected == 9)
                                     break loop;
 
                                 ArrayList<String> itemInfo = model.getItemInfo(itemsInCategory.get(selected));
                                 view.displayItemInfo(itemInfo);
 
-                                view.addCartGoBack();
+                                view.printString("1. Add to cart | 2. Go back to categories");
                                 selected = scan.nextInt();
                                 switch (selected) {
                                     case 1:
@@ -203,29 +235,6 @@ public class WebShop {
 
     }
 
-    public void setItemInfo() {
-
-        Scanner scanInt = new Scanner(System.in);
-        Scanner scanString = new Scanner(System.in);
-
-        view.adminNewItem("item_id");
-        this.itemId = scanInt.nextInt();
-
-        view.adminNewItem("itemname");
-        this.itemName = scanString.nextLine();
-
-        view.adminNewItem("category");
-        this.itemCategory = scanString.nextLine();
-
-        view.adminNewItem("price");
-        this.itemPrice = scanInt.nextInt();
-
-        view.adminNewItem("info");
-        this.itemInfo = scanString.nextLine();
-
-        view.adminNewItem("stock");
-        this.itemStock = scanInt.nextInt();
-    }
 
     public ArrayList<String> newCustomer() {
         ArrayList<String> customerInfo = new ArrayList<>();
@@ -264,7 +273,6 @@ public class WebShop {
         itemInfo.add(scan.nextLine());
         return itemInfo;
     }
-
 
 
     public void removeItemFromCart(int id) {

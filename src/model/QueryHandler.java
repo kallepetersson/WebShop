@@ -13,19 +13,36 @@ public class QueryHandler {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO items(item_id, itemname, category, price, stock, description) " +
                     "VALUES (?,?,?,?,?,?)");
             for (int i = 0; i < 6; i++) {
-                ps.setString(i+1,itemInfo.get(i));
+                ps.setString(i + 1, itemInfo.get(i));
             }
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateItemStock(int item_id, int stock) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE items SET stock=stock+? where item_id=?");
+            ps.setInt(1, stock);
+            ps.setInt(2, item_id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateItemPrice(int item_id, int price) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE items SET price=? where item_id=?");
+            ps.setInt(1, price);
+            ps.setInt(2, item_id);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }    }
 
-    public void updateItem(int item_id, String itemname, String category, int price, String info, int stock) {
-        // Update Query
-    }
-
     public void deleteItem(String name) {
-
 
         try {
             PreparedStatement ps = connection.prepareStatement("delete from items where itemname = ?");
@@ -35,9 +52,6 @@ public class QueryHandler {
             e.printStackTrace();
         }
 
-
-
-        // Delete Query
     }
 
     public ArrayList<String> getItemsInCategory(String category) {
@@ -165,7 +179,7 @@ public class QueryHandler {
     public int placeOrder(ArrayList<Integer[]> cart, int customerID) {
         int orderID = 0;
         try {
-            PreparedStatement ps = connection.prepareStatement("insert into orders(customer_id, order_date) values (?, strftime('%Y-%m-%d %H:%M:%S','now'))");
+            PreparedStatement ps = connection.prepareStatement("insert into orders(customer_id, order_date) values (?, strftime('%Y-%m-%d %H:%M:%S','now', 'localtime'))");
             ps.setInt(1, customerID);
             ps.executeUpdate();
             ps = connection.prepareStatement("SELECT last_insert_rowid()");
@@ -176,6 +190,10 @@ public class QueryHandler {
                 ps.setInt(1, orderID);
                 ps.setInt(2, cart.get(i)[0]);
                 ps.setInt(3, cart.get(i)[1]);
+                ps.executeUpdate();
+                ps = connection.prepareStatement("UPDATE items SET stock=stock-? where item_id=?");
+                ps.setInt(1, cart.get(i)[1]);
+                ps.setInt(2, cart.get(i)[0]);
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -221,8 +239,8 @@ public class QueryHandler {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO customers(firstname, lastname, address, zipcode, city, email, phone)" +
                     "VALUES (?,?,?,?,?,?,?)");
-            for (int i = 0; i < 7 ; i++) {
-                ps.setString(i+1, customerInfo.get(i));
+            for (int i = 0; i < 7; i++) {
+                ps.setString(i + 1, customerInfo.get(i));
             }
             ps.executeUpdate();
             ps = connection.prepareStatement("SELECT last_insert_rowid()");
@@ -234,14 +252,14 @@ public class QueryHandler {
         return customerID;
     }
 
-    public ArrayList<ArrayList<String>> displayCustomerOrders(int customerID){
+    public ArrayList<ArrayList<String>> displayCustomerOrders(int customerID) {
         ArrayList<ArrayList<String>> orderIDs = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT order_id, order_date, shipped_date FROM orders where customer_id=? ORDER BY order_id");
             ps.setInt(1, customerID);
             ResultSet rs = ps.executeQuery();
-            int i=0;
-            while(rs.next()){
+            int i = 0;
+            while (rs.next()) {
                 orderIDs.add(new ArrayList<>());
                 orderIDs.get(i).add(rs.getString(1));
                 orderIDs.get(i).add(rs.getString(2));
@@ -254,14 +272,14 @@ public class QueryHandler {
         return orderIDs;
     }
 
-    public ArrayList<ArrayList<String>> displayOrderedItems(int orderID){
+    public ArrayList<ArrayList<String>> displayOrderedItems(int orderID) {
         ArrayList<ArrayList<String>> orderIDs = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT item_id, quantity FROM ordered_items where order_id=? ORDER BY item_id");
             ps.setInt(1, orderID);
             ResultSet rs = ps.executeQuery();
-            int i=0;
-            while(rs.next()){
+            int i = 0;
+            while (rs.next()) {
                 orderIDs.add(new ArrayList<>());
                 orderIDs.get(i).add(rs.getString(1));
                 orderIDs.get(i).add(rs.getString(2));
@@ -272,6 +290,27 @@ public class QueryHandler {
         }
         return orderIDs;
     }
+
+    public ArrayList<ArrayList<String>> allOrders() {
+        ArrayList<ArrayList<String>> orderIDs = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM orders ORDER BY order_id");
+            ResultSet rs = ps.executeQuery();
+            int i = 0;
+            while (rs.next()) {
+                orderIDs.add(new ArrayList<>());
+                orderIDs.get(i).add(rs.getString(1));
+                orderIDs.get(i).add(rs.getString(2));
+                orderIDs.get(i).add(rs.getString(3));
+                orderIDs.get(i).add(rs.getString(4));
+                i++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderIDs;
+    }
+
 
 
 

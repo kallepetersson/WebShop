@@ -4,27 +4,15 @@ import java.util.ArrayList;
 
 public class console {
 
-    public void chooseUser() {
-        System.out.println("1. Admin | 2. Customer");
-    }
-
     public void loggedInAs(String user) {
         System.out.println("[Logged in as " + user + "]");
-    }
-
-    public void adminCommand() {
-        System.out.println("1. Add item to database | 2. Update item | 3. Remove item");
-    }
-
-    public void adminNewItem(String item) {
-        System.out.println("Enter " + item);
     }
 
     public void displayCategories(ArrayList<String> categories) {
         System.out.print(" ");
         for (int i = 0; i < categories.size(); i++) {
             if (i == categories.size() - 1) {
-                System.out.println(i + 1 + ". " + categories.get(i) + " | 8. Previous Orders | 9. Show Cart | 10. Exit ");
+                System.out.println(i + 1 + ". " + categories.get(i) + " | 8. Previous Orders | 9. Show Cart | 10. Logout ");
             } else {
                 System.out.print(i + 1 + ". " + categories.get(i) + " | ");
             }
@@ -70,7 +58,7 @@ public class console {
                 System.out.print(bag.get(i).get(j) + " ");
                 if (j == 2) {
                     System.out.print("SEK ");
-                    totalPrice += Integer.valueOf(bag.get(i).get(j));
+                    totalPrice += Integer.valueOf(bag.get(i).get(j))*Integer.valueOf(bag.get(i).get(3));
                 }
             }
             System.out.println();
@@ -78,14 +66,6 @@ public class console {
         System.out.println("Total Price: " + totalPrice + " SEK");
 
 
-    }
-
-    public void loginRegister() {
-        System.out.println("1. Login | 2. Register Customer");
-    }
-
-    public void customerID() {
-        System.out.print("Enter your customer ID: ");
     }
 
     public void enterInfo(String info) {
@@ -102,6 +82,23 @@ public class console {
     public void displayItemInfoPrevOrder(ArrayList<String> orderItems, ArrayList<String> itemInfo){
         System.out.println(orderItems.get(1) + " " + itemInfo.get(0) + " Price: " + itemInfo.get(1));
 
+
+    }
+    public void displayAllOrders(ArrayList<ArrayList<String>> allOrders){
+        for (int i = 0; i < allOrders.size(); i++) {
+            System.out.println("Order ID: " + allOrders.get(i).get(0) + " | Customer ID: "+allOrders.get(i).get(1)+" | Order Date: " + allOrders.get(i).get(2) +
+                    " | Shipped Date: " + allOrders.get(i).get(3));
+        }
+    }
+
+    public void displayAllItemsInOrder(ArrayList<ArrayList<String>> orderInfo){
+        System.out.println("Item ID | Quantity");
+        for (int i = 0; i < orderInfo.size(); i++) {
+            for (int j = 0; j < orderInfo.get(i).size(); j++) {
+                System.out.print(orderInfo.get(i).get(j)+" ");
+            }
+            System.out.println();
+        }
     }
 
     public void displayTotalPrice(int totalPrice){
@@ -112,28 +109,12 @@ public class console {
         System.out.println("ID " + id + " doesn't exist in the database");
     }
 
-    public void noItemsInCart(){
-        System.out.println("You have no items in the cart");
-    }
-
-    public void checkoutRemoveContinue(){
-        System.out.println("1. Checkout | 2. Remove Item | 3. Continue Shopping");
-    }
-
-    public void thanksForOrder(){
-        System.out.println("Thanks for you order!");
-    }
-
-    public void itemIDRemoveFromCart(){
-        System.out.println("Enter item id to be removed from the cart");
-    }
-
-    public void addCartGoBack(){
-        System.out.println("1. Add to cart | 2. Go back to categories");
-    }
-
     public void newCustomer(int customer){
         System.out.println("Your Customer id: " + customer);
+    }
+
+    public void printString(String s){
+        System.out.println(s);
     }
 
 }
