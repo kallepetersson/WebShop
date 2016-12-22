@@ -17,8 +17,8 @@ public class CreateDB {
         setConnectionAndCreateDB(false);
         importItems();
         importCustomer();
-
         closeConnection();
+        System.out.println("Database created!");
     }
 
     public static void setConnectionAndCreateDB(boolean dropTables) {
