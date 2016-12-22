@@ -8,9 +8,17 @@ public class QueryHandler {
     private static Connection connection = null;
     private static String dataBaseName = "jdbc:sqlite:webshop.db";
 
-    public void createItem(int item_id, String itemname, String category, int price, String info, int stock) {
-        // create Query
-    }
+    public void createItem(ArrayList<String> itemInfo) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO items(item_id, itemname, category, price, stock, description) " +
+                    "VALUES (?,?,?,?,?,?)");
+            for (int i = 0; i < 6; i++) {
+                ps.setString(i+1,itemInfo.get(i));
+            }
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }    }
 
     public void updateItem(int item_id, String itemname, String category, int price, String info, int stock) {
         // Update Query

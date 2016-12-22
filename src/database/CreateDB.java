@@ -40,36 +40,36 @@ public class CreateDB {
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS items(" +
                     "item_id INTEGER PRIMARY KEY," +
-                    "itemname TEXT," +
-                    "category TEXT," +
-                    "price INTEGER," +
-                    "stock INTEGER," +
-                    "description TEXT)");
+                    "itemname TEXT NOT NULL," +
+                    "category TEXT NOT NULL," +
+                    "price INTEGER NOT NULL," +
+                    "stock INTEGER NOT NULL," +
+                    "description TEXT NOT NULL)");
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS customers(" +
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "firstname TEXT," +
-                    "lastname TEXT," +
-                    "address TEXT," +
-                    "zipcode TEXT," +
-                    "city TEXT," +
-                    "email TEXT," +
-                    "phone TEXT)");
+                    "firstname TEXT NOT NULL," +
+                    "lastname TEXT NOT NULL," +
+                    "address TEXT NOT NULL," +
+                    "zipcode TEXT NOT NULL," +
+                    "city TEXT NOT NULL," +
+                    "email TEXT NOT NULL," +
+                    "phone TEXT NOT NULL)");
 
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS orders(" +
                     "order_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "customer_id INTEGER," +
-                    "order_date TEXT," +
+                    "customer_id INTEGER NOT NULL," +
+                    "order_date TEXT NOT NULL," +
                     "Shipped_date TEXT DEFAULT 'Processing'," +
                     "FOREIGN KEY (customer_id) REFERENCES customers(id) ON UPDATE CASCADE" +
                     ")");
 
 
             statement.executeUpdate("CREATE TABLE IF NOT EXISTS ordered_items(" +
-                    "order_id INTEGER," +
-                    "item_id INTEGER," +
-                    "quantity INTEGER,"+
+                    "order_id INTEGER NOT NULL," +
+                    "item_id INTEGER NOT NULL," +
+                    "quantity INTEGER NOT NULL,"+
                     "PRIMARY KEY(order_id, item_id)," +
                     "FOREIGN KEY (order_id) REFERENCES orders(order_id)," +
                     "FOREIGN KEY (item_id) REFERENCES items(item_id) ON UPDATE CASCADE" +

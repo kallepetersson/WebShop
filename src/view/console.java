@@ -51,7 +51,7 @@ public class console {
 
     public void displayBag(ArrayList<ArrayList<String>> bag) {
         int totalPrice = 0;
-        System.out.println("ID | Item Name | Price | Quanity");
+        System.out.println("ID | Item Name | Price | Quantity");
         for (int i = 0; i < bag.size(); i++) {
             for (int j = 0; j < bag.get(i).size(); j++) {
                 System.out.print(bag.get(i).get(j) + " ");

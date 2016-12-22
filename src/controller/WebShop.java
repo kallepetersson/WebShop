@@ -43,14 +43,13 @@ public class WebShop {
                     switch (scan.nextInt()) {   // 1. Add item | 2. Update item | 3. Remove item
 
                         case 1:     // Add item
-                            setItemInfo();
-                            model.createItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
+                            //setItemInfo();
+                            model.createItem(changeItemInfo());
 
                             break;
                         case 2:     // Update item
 
-                            setItemInfo();
-                            model.updateItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
+                            //model.updateItem(itemId, itemName, itemCategory, itemPrice, itemInfo, itemStock);
 
                             break;
                         case 3:     // // Delete item
@@ -230,6 +229,26 @@ public class WebShop {
         customerInfo.add(scan.nextLine());
         return customerInfo;
     }
+
+    public ArrayList<String> changeItemInfo() {
+        ArrayList<String> itemInfo = new ArrayList<>();
+        Scanner scan = new Scanner(System.in);
+        view.enterInfo("item_id");
+        itemInfo.add(scan.nextLine());
+        view.enterInfo("itemname");
+        itemInfo.add(scan.nextLine());
+        view.enterInfo("category");
+        itemInfo.add(scan.nextLine());
+        view.enterInfo("price");
+        itemInfo.add(scan.nextLine());
+        view.enterInfo("stock");
+        itemInfo.add(scan.nextLine());
+        view.enterInfo("description");
+        itemInfo.add(scan.nextLine());
+        return itemInfo;
+    }
+
+
 
     public void removeItemFromCart(int id) {
         for (int i = 0; i < cart.size(); i++) {
